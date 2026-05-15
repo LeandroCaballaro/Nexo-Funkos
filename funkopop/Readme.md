@@ -111,14 +111,6 @@ python manage.py runserver
 - Contraseña: 1234
 
 
-# Autor
-
-Proyecto desarrollado por:
-
-```bash
-Pablo Gareis
-```
-
 ---
 
 # 📄 Licencia
