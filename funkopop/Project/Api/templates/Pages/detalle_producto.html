@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ producto.Nombre }} | Nexo Funkos{% endblock %}
+
+{% block cuerpo %}
+<section class="page-hero page-hero-compact">
+    <div class="page-hero-content">
+        <p class="hero-subtitle">Detalle de producto</p>
+        <h1 class="hero-title">{{ producto.Nombre }} <span>Funko</span></h1>
+        <p class="hero-quote">Una vista enfocada en la información principal antes de sumar compra o checkout.</p>
+    </div>
+</section>
+
+<section class="detail-section">
+    <div class="breadcrumbs">
+        <a href="{% url 'home' %}">Inicio</a>
+        <span>/</span>
+        <a href="{% url 'catalogo' %}">Catálogo</a>
+        <span>/</span>
+        <span>{{ producto.Nombre }}</span>
+    </div>
+
+    <div class="product-detail-card">
+        <div class="product-visual">
+            <div class="product-visual-badge">{{ producto.Categoria }}</div>
+            <span>{{ producto.Nombre|slice:":1"|upper }}</span>
+        </div>
+
+        <div class="product-detail-info">
+            <p class="product-category">{{ producto.Categoria }}</p>
+            <h2>{{ producto.Nombre }}</h2>
+            <p class="detail-price">${{ producto.Precio }}</p>
+            <p class="detail-stock">Stock disponible: {{ producto.Cantidad }} unidades</p>
+            <div class="detail-description">
+                <h3>Descripción</h3>
+                <p>{{ producto.Descripcion }}</p>
+            </div>
+            <div class="detail-actions">
+                <a href="{% url 'catalogo' %}" class="hero-btn">Volver al catálogo</a>
+                {% if perms.Api.add_producto %}
+                <a href="{% url 'agregar' %}" class="secondary-btn">Cargar otro producto</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if relacionados %}
+<section class="featured-products related-section">
+    <div class="section-header">
+        <h2 class="section-title">También podría <span>gustarte</span></h2>
+        <div class="section-line"></div>
+    </div>
+    <div class="product-grid">
+        {% for item in relacionados %}
+        <article class="product-card">
+            <div class="product-card-media">
+                <span>{{ item.Nombre|slice:":1"|upper }}</span>
+            </div>
+            <div class="product-card-body">
+                <p class="product-category">{{ item.Categoria }}</p>
+                <h3>{{ item.Nombre }}</h3>
+                <p class="product-description">{{ item.Descripcion }}</p>
+                <div class="product-meta">
+                    <span class="product-price">${{ item.Precio }}</span>
+                    <span class="product-stock">{{ item.Cantidad }} en stock</span>
+                </div>
+                <a href="{% url 'detalle_producto' item.Codigo %}" class="product-link">Ver detalle</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

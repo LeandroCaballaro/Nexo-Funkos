@@ -1,24 +1,36 @@
-{% extends 'Base.html' %}
+{% extends 'base.html' %}
 
 {% load static %}
 
 
 
+{% block title %}Agregar Producto | Nexo Funkos{% endblock %}
+
 {% block cuerpo %}
-<div class="contenedor_Formulario">
-    <img src="{% static 'src/Forms/a.jpg' %}" alt="Figuras Funko Pop Anime">
-    <form action="" method="post" enctype="multipart/form-data">
-        <h1>Agregar Funko Pop Anime</h1>
-        {{Formulario}}
-        {% csrf_token %}
-        <input type="submit" value="Registrar Funko Pop" class="btnr">
-        {% if Mensaje %}
-        <div class="alert alert-success" role="alert" id="Alerta">
-            {{Mensaje}}
-        </div>
-        {% endif %}
-    </form>
-</div>
+<section class="page-hero page-hero-compact">
+    <div class="page-hero-content">
+        <p class="hero-subtitle">Panel de administración</p>
+        <h1 class="hero-title">Agregar <span>Funko</span></h1>
+        <p class="hero-quote">Carga nuevos productos sin salir del estilo visual actual de la tienda.</p>
+    </div>
+</section>
+
+<section class="page-shell">
+    <div class="contenedor_Formulario">
+        <img src="{% static 'src/violet.jpg' %}" alt="Figuras Funko Pop Anime">
+        <form action="" method="post" enctype="multipart/form-data">
+            <h1>Agregar Funko Pop Anime</h1>
+            {{Formulario}}
+            {% csrf_token %}
+            <input type="submit" value="Registrar Funko Pop" class="btnr">
+            {% if Mensaje %}
+            <div class="alert alert-success" role="alert" id="Alerta">
+                {{Mensaje}}
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</section>
 
 <script>
     setTimeout(function () {

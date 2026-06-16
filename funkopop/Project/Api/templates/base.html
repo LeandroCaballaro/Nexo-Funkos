@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexo Funkos | Funko Pop Anime</title>
+    <title>{% block title %}Nexo Funkos | Funko Pop Anime{% endblock %}</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
         rel="stylesheet">
@@ -13,30 +13,32 @@
 </head>
 
 <body>
-    <!-- Navigation -->
     <nav id="navbar">
-        <a href="#" class="logo">NEXO FUNKOS</a>
+        <a href="{% url 'home' %}" class="logo">NEXO FUNKOS</a>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#series">Series</a></li>
-            <li><a href="#colecciones">Colecciones</a></li>
-            <li><a href="#galeria">Galería</a></li>
-
-            {% if user.is_authenticated %}
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Logout" class="btn btn-primary">
-                <a href="">@{{ user.username }}</a>
-            </form>
-            {% else %}
-            <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
-            {% endif %}
+            <li><a href="{% url 'home' %}#inicio">Inicio</a></li>
+            <li><a href="{% url 'home' %}#series">Series</a></li>
+            <li><a href="{% url 'home' %}#colecciones">Colecciones</a></li>
+            <li><a href="{% url 'catalogo' %}">Catálogo</a></li>
+            <li><a href="{% url 'home' %}#galeria">Galería</a></li>
 
             {% if perms.Api.add_producto %}
-            <li><a href="{% url 'agregar' %}">Agregar figura</a></li>
+            <li><a href="{% url 'agregar' %}" class="nav-cta">Agregar figura</a></li>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+            <li class="nav-user"><span>@{{ user.username }}</span></li>
+            <li>
+                <form action="{% url 'logout' %}" method="post" class="nav-auth-form">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-auth-btn">Logout</button>
+                </form>
+            </li>
+            {% else %}
+            <li><a href="{% url 'login' %}" class="nav-cta">Login</a></li>
             {% endif %}
         </ul>
-        <div class="menu-toggle" id="menuToggle">
+        <div class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false" role="button" tabindex="0">
             <span></span>
             <span></span>
             <span></span>
@@ -44,55 +46,86 @@
     </nav>
 
     {% block cuerpo %}
-    <!-- Hero Section -->
     <section class="hero" id="inicio">
         <div class="hero-bg"></div>
         <div class="hero-content">
             <p class="hero-subtitle">Tu colección</p>
             <h1 class="hero-title">Funko Pop <span>Anime</span></h1>
             <p class="hero-quote">Descubre la magia kawaii de tus personajes favoritos en versión Funko Pop.</p>
-            <a href="#series" class="hero-btn">Ver colecciones</a>
+            <a href="{% url 'catalogo' %}" class="hero-btn">Ver catálogo</a>
         </div>
         <div class="scroll-indicator">
             <span></span>
         </div>
     </section>
 
-    <!-- Series Section -->
     <section class="houses" id="series">
         <div class="section-header">
-            <h2 class="section-title">Series <span>Iconicas</span></h2>
+            <h2 class="section-title">Series <span>Icónicas</span></h2>
             <div class="section-line"></div>
         </div>
         <div class="houses-grid">
-            <div class="house-card">
+            <article class="house-card">
                 <div class="house-sigil">🌸</div>
                 <h3 class="house-name">Sousou no Frieren</h3>
                 <p class="house-motto">"Magia, viajes y recuerdos"</p>
                 <p class="house-desc">Disfruta figuras Funko Pop inspiradas en el viaje íntimo de Frieren entre mundos mágicos.</p>
-            </div>
-            <div class="house-card">
+            </article>
+            <article class="house-card">
                 <div class="house-sigil">⚔️</div>
-                <h3 class="house-name">Re zero</h3>
+                <h3 class="house-name">Re:Zero</h3>
                 <p class="house-motto">"Volver a cero, vivir otra vez"</p>
                 <p class="house-desc">Colecciona a Subaru, Emilia y otros personajes de esta serie de suspenso y fantasía.</p>
-            </div>
-            <div class="house-card">
+            </article>
+            <article class="house-card">
                 <div class="house-sigil">🕶️</div>
                 <h3 class="house-name">The Eminence in Shadow</h3>
                 <p class="house-motto">"Poder desde las sombras"</p>
-                <p class="house-desc">Descubre Funko Pop de los héroes y villanos secretos de esta comedia oscura de anime.</p>
-            </div>
-            <div class="house-card">
+                <p class="house-desc">Descubre Funkos de héroes y villanos secretos de esta comedia oscura de anime.</p>
+            </article>
+            <article class="house-card">
                 <div class="house-sigil">💥</div>
-                <h3 class="house-name">JoJos</h3>
+                <h3 class="house-name">JoJo's</h3>
                 <p class="house-motto">"Aventura estilizada y stands legendarios"</p>
-                <p class="house-desc">Encuentra a los protagonistas de JoJos en versión Funko con actitud épica.</p>
-            </div>
+                <p class="house-desc">Encuentra a los protagonistas de JoJo's en versión Funko con actitud épica.</p>
+            </article>
         </div>
     </section>
 
-    <!-- Collections Section -->
+    <section class="featured-products" id="destacados">
+        <div class="section-header">
+            <h2 class="section-title">Funkos <span>Destacados</span></h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="product-grid">
+            {% for producto in productos_destacados %}
+            <article class="product-card">
+                <div class="product-card-media">
+                    <span>{{ producto.Nombre|slice:":1"|upper }}</span>
+                </div>
+                <div class="product-card-body">
+                    <p class="product-category">{{ producto.Categoria }}</p>
+                    <h3>{{ producto.Nombre }}</h3>
+                    <p class="product-description">{{ producto.Descripcion }}</p>
+                    <div class="product-meta">
+                        <span class="product-price">${{ producto.Precio }}</span>
+                        <span class="product-stock">{{ producto.Cantidad }} en stock</span>
+                    </div>
+                    <a href="{% url 'detalle_producto' producto.Codigo %}" class="product-link">Ver detalle</a>
+                </div>
+            </article>
+            {% empty %}
+            <div class="empty-state">
+                <h3>Aún no hay productos cargados</h3>
+                <p>Cuando agregues tus primeros Funkos, esta sección los destacará automáticamente.</p>
+                {% if perms.Api.add_producto %}
+                <a href="{% url 'agregar' %}" class="hero-btn">Cargar primer producto</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
     <section class="locations" id="colecciones">
         <div class="section-header">
             <h2 class="section-title">Colecciones <span>Destacadas</span></h2>
@@ -104,9 +137,9 @@
                     <img src="{% static 'src/winterfell.jpg' %}" alt="Colección Funko Pop anime exclusiva">
                 </div>
                 <div class="location-content">
-                    <h3>Ediciones Limitadas</h3>
+                    <h3>Ediciones limitadas</h3>
                     <p>Encuentra lanzamientos exclusivos y figuras especiales diseñadas para completar tu vitrina de anime.</p>
-                    <a href="#" class="location-btn">Explorar ahora →</a>
+                    <a href="{% url 'catalogo' %}" class="location-btn">Explorar ahora →</a>
                 </div>
             </div>
             <div class="location-item">
@@ -114,15 +147,14 @@
                     <img src="{% static 'src/kings-landing.jpg' %}" alt="Figuras Funko Pop anime de colección">
                 </div>
                 <div class="location-content">
-                    <h3>Figuras Pop favoritas</h3>
+                    <h3>Figuras favoritas</h3>
                     <p>Desde héroes brillantes hasta villanos icónicos, completa tu colección con los personajes más pedidos.</p>
-                    <a href="#" class="location-btn">Ver favoritos →</a>
+                    <a href="{% url 'catalogo' %}" class="location-btn">Ver favoritos →</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Gallery Section -->
     <section class="gallery" id="galeria">
         <div class="section-header">
             <h2 class="section-title">Galería Funko <span>Pop</span></h2>
@@ -132,46 +164,44 @@
             <div class="gallery-item">
                 <img src="{% static 'src/kings-landing.jpg' %}" alt="Figura Funko Pop anime exclusiva">
                 <div class="gallery-overlay">
-                    <h4>Edición Especial</h4>
+                    <h4>Edición especial</h4>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="{% static 'src/iron-throne.jpg' %}" alt="Figura Funko Pop colección premium">
                 <div class="gallery-overlay">
-                    <h4>Colección Premium</h4>
+                    <h4>Colección premium</h4>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="{% static 'src/warrior.jpg' %}" alt="Personaje Funko Pop anime">
                 <div class="gallery-overlay">
-                    <h4>Personajes Icónicos</h4>
+                    <h4>Personajes icónicos</h4>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="{% static 'src/winterfell.jpg' %}" alt="Figuras anime brillantes">
                 <div class="gallery-overlay">
-                    <h4>Figuras Brillantes</h4>
+                    <h4>Figuras brillantes</h4>
                 </div>
             </div>
             <div class="gallery-item">
                 <img src="{% static 'src/kings-landing.jpg' %}" alt="Figuras Funko Pop anime coleccionables">
                 <div class="gallery-overlay">
-                    <h4>For collectors</h4>
+                    <h4>Para coleccionistas</h4>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Quote Section -->
     <section class="quote-section">
         <div class="quote-content">
             <div class="quote-mark">"</div>
             <p class="quote-text">Agrega un toque kawaii a tu vitrina con Funko Pop de tus animes favoritos.</p>
-            <p class="quote-author">— Funko Pop Anime</p>
+            <p class="quote-author">— Nexo Funkos</p>
         </div>
     </section>
 
-    <!-- Newsletter Section -->
     <section class="newsletter">
         <div class="newsletter-content">
             <h3>Únete al Fan Club Pop</h3>
@@ -182,17 +212,20 @@
             </form>
         </div>
     </section>
-
     {% endblock %}
-    <!-- Footer -->
+
     <footer>
         <div class="footer-content">
-            <div class="footer-logo">FUNKO POP ANIME</div>
+            <div class="footer-logo">NEXO FUNKOS</div>
             <ul class="footer-links">
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#series">Series</a></li>
-                <li><a href="#colecciones">Colecciones</a></li>
-                <li><a href="#galeria">Galería</a></li>
+                <li><a href="{% url 'home' %}#inicio">Inicio</a></li>
+                <li><a href="{% url 'catalogo' %}">Catálogo</a></li>
+                <li><a href="{% url 'home' %}#colecciones">Colecciones</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'agregar' %}">Administrar</a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
             </ul>
             <div class="footer-social">
                 <a href="#" aria-label="Facebook">f</a>
@@ -201,7 +234,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2026 Funko Pop Anime. Todos los derechos reservados.</p>
+            <p>© 2026 Nexo Funkos. Todos los derechos reservados.</p>
         </div>
     </footer>
 

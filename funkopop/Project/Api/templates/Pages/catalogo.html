@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo | Nexo Funkos{% endblock %}
+
+{% block cuerpo %}
+<section class="page-hero">
+    <div class="page-hero-content">
+        <p class="hero-subtitle">Colección completa</p>
+        <h1 class="hero-title">Catálogo <span>Funko</span></h1>
+        <p class="hero-quote">Explora todas las figuras cargadas en la tienda con filtros simples por nombre y categoría.</p>
+    </div>
+</section>
+
+<section class="catalog-section">
+    <div class="catalog-layout">
+        <aside class="catalog-sidebar">
+            <div class="sidebar-card">
+                <h2>Buscar</h2>
+                <form method="get" class="catalog-search">
+                    <input type="text" name="q" value="{{ consulta }}" placeholder="Buscar por nombre">
+                    {% if categoria_actual %}
+                    <input type="hidden" name="categoria" value="{{ categoria_actual }}">
+                    {% endif %}
+                    <button type="submit">Aplicar</button>
+                </form>
+            </div>
+
+            <div class="sidebar-card">
+                <h2>Categorías</h2>
+                <div class="category-list">
+                    <a href="{% url 'catalogo' %}" class="category-pill {% if not categoria_actual %}active{% endif %}">Todas</a>
+                    {% for categoria in categorias %}
+                    <a href="{% url 'catalogo' %}?categoria={{ categoria|urlencode }}" class="category-pill {% if categoria_actual == categoria %}active{% endif %}">
+                        {{ categoria }}
+                    </a>
+                    {% empty %}
+                    <span class="category-pill disabled">Sin categorías</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
+
+        <div class="catalog-content">
+            <div class="catalog-summary">
+                <p>{{ productos|length }} producto{{ productos|length|pluralize }} encontrado{{ productos|length|pluralize }}</p>
+                {% if consulta or categoria_actual %}
+                <a href="{% url 'catalogo' %}" class="product-link">Limpiar filtros</a>
+                {% endif %}
+            </div>
+
+            <div class="product-grid">
+                {% for producto in productos %}
+                <article class="product-card">
+                    <div class="product-card-media">
+                        <span>{{ producto.Nombre|slice:":1"|upper }}</span>
+                    </div>
+                    <div class="product-card-body">
+                        <p class="product-category">{{ producto.Categoria }}</p>
+                        <h3>{{ producto.Nombre }}</h3>
+                        <p class="product-description">{{ producto.Descripcion }}</p>
+                        <div class="product-meta">
+                            <span class="product-price">${{ producto.Precio }}</span>
+                            <span class="product-stock">{{ producto.Cantidad }} en stock</span>
+                        </div>
+                        <a href="{% url 'detalle_producto' producto.Codigo %}" class="product-link">Ver detalle</a>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="empty-state">
+                    <h3>No encontramos productos con esos filtros</h3>
+                    <p>Prueba otra búsqueda o elimina la categoría seleccionada.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
